@@ -1,0 +1,340 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+    <HEAD>
+        <META HTTP-EQUIV="Content-Language" CONTENT="es">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <TITLE>Sistema de seguimiento de problemas de pago en Ciencias</TITLE>
+    </HEAD>
+
+
+    <BODY  BGCOLOR="FFFFFF"> 
+        <CENTER>
+
+            <img src="head.png" width="1000" height="300" alt="head"/>
+          
+            <H1>Seguimiento de problemas de pago en Ciencias</H1>
+
+                    
+            <br>
+            <br> 
+            
+                <FORM NAME="PERCEPSIONES" METHOD="POST" ACTION="Pagos.php" enctype="multipart/form-data">
+                
+                        <table bgcolor="#b55858" align="center" cellpadding="0" cellspacing="0" width="640" border="2" >
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Nombramiento</th>
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Numero de horas</th>
+                            
+                            <tr>
+                                <td align="center">
+                                        <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <select name="Nombramiento">
+                                            <option value="AydanteA">Ayudante de Profesor de Asignatura A</option>
+                                            <option value="AydanteA">Ayudante de Profesor de Asignatura B</option>
+                                            <option value="ProfeAsignaturaA">Profesor de Asignatura A</option>
+                                            <option value="ProfeAsignaturaB">Profesor de Asignatura B</option>
+                                        </select>
+                                    </font>
+                                </td>                                  
+                                <td align="center">
+                                        <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input type="text" name="horas" size="10" maxlength="10" value="">
+                                    </font>
+                                </td> 
+                            </tr>
+                        </table> 
+                        
+                       <table bgcolor="#b55858" align="center" cellpadding="0" cellspacing="0" width="640" border="2" >
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Antig&uuml;edad</th>
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Grado</th>
+                            
+                            <tr>
+                               <td align="center">
+                                        <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input type="text" name="antiguedad" size="10" maxlength="10" value="">
+                                    </font>
+                                </td>                             
+                                <td align="center">
+                                        <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <select name="Grado">
+                                            <option value="Licenciatura">Licenciatura</option>
+                                            <option value="Maestria">Maestr&iacute;a</option>
+                                            <option value="Docotorado">Docotorado</option>
+                                        </select>
+                                    </font>
+                                </td>                                  
+ 
+                            </tr>
+                        </table> 
+                        
+                <br>                             
+                
+                        <table bgcolor="#b55858" align="center" cellpadding="0" cellspacing="0" width="640" border="2" >
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Semestre</th>
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Quincena</th>
+                            
+                            <tr>
+                                <td align="center">
+                                        <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <select name="Semestre">
+                                            <option value="1">xxxx-1</option>
+                                            <option value="2">xxxx-2</option>
+                                        </select>
+                                    </font>
+                                </td>                                  
+                                <td align="center">
+                                        <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <select name="Semestre">
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>                                            
+                                        </select>
+                                    </font>
+                                </td> 
+                            </tr>
+                        </table>   
+                        
+            <br>
+            <br>                         
+                
+                    
+                    <TABLE> 
+                        <TR> 
+                        <TD COLSPAN="2" BGCOLOR="#000000" WIDTH="100%">
+                        
+                        
+                        <table bgcolor="#b55858" align="center" cellpadding="0" cellspacing="0" width="640" border="2" >
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">ID</th>
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Concepto</th>
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Veces por a&ntilde;o</th>
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">Monto</th>
+                            <th align="center" bgcolor="4c0606"><font size="3" face="Arial, Helvetica,sans-serif" color="#ffffcc">PAGADO</th> 
+                            
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">1</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Sueldo Base</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">24</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="SueldoBase" type="radio" value="S" > Si
+                                        <input name="SueldoBase" type="radio" value="N">  No
+                                        <input name="SueldoBase" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>
+                            
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">2</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Material Did&aacute;ctico</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">24</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="MatDidactico" type="radio" value="S" > Si
+                                        <input name="MatDidactico" type="radio" value="N">  No
+                                        <input name="MatDidactico" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>
+                            
+                            
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">3</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Ayuda Despensa</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">12</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="AyudaDespensa" type="radio" value="S" > Si
+                                        <input name="AyudaDespensa" type="radio" value="N">  No
+                                        <input name="AyudaDespensa" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>
+                            
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">4</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Reconocimiento Personal Acad. Asig.</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">4</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="RecoAsignatura" type="radio" value="S" > Si
+                                        <input name="RecoAsignatura" type="radio" value="N">  No
+                                        <input name="RecoAsignatura" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>
+                            
+                            
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">5</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Apoyo para la sup. acad.</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">2</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="ApoyoSupAcad" type="radio" value="S" > Si
+                                        <input name="ApoyoSupAcad" type="radio" value="N">  No
+                                        <input name="ApoyoSupAcad" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>  
+                            
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">6</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Prima Vacacional</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">2</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="PrimaVacacional" type="radio" value="S" > Si
+                                        <input name="PrimaVacacional" type="radio" value="N">  No
+                                        <input name="PrimaVacacional" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>   
+                            
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">7</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Aguinaldo</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">2</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="Aguinaldo" type="radio" value="S" > Si
+                                        <input name="Aguinaldo" type="radio" value="N">  No
+                                        <input name="Aguinaldo" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>  
+                            
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">8</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Ayuda para la adq. de libros</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">1</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="AyudaLibros" type="radio" value="S" > Si
+                                        <input name="AyudaLibros" type="radio" value="N">  No
+                                        <input name="AyudaLibros" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr> 
+                        
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">9</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Ayuda para libros d&iacute;a del maestro</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">1</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="AyudaDiaMaestro" type="radio" value="S" > Si
+                                        <input name="AyudaDiaMaestro" type="radio" value="N">  No
+                                        <input name="AyudaDiaMaestro" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>  
+                        
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">10</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">D&iacute;as ajuste (5)</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">1</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="DiasAjuste" type="radio" value="S" > Si
+                                        <input name="DiasAjuste" type="radio" value="N">  No
+                                        <input name="DiasAjuste" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>  
+                        
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">11</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Pago Cl&aacute;usula 60</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">De 0 a 3</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="Clausula60" type="radio" value="S" > Si
+                                        <input name="Clausula60" type="radio" value="N">  No
+                                        <input name="Clausula60" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>     
+                        
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">12</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Despensa Extraordinaria</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">1</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="DespensaExtraordinaria" type="radio" value="S" > Si
+                                        <input name="DespensaExtraordinaria" type="radio" value="N">  No
+                                        <input name="DespensaExtraordinaria" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>
+                        
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">13</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Compensaci&oacute;n Antig&uuml;edad</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">24</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="CompensacionAntiguedad" type="radio" value="S" > Si
+                                        <input name="CompensacionAntiguedad" type="radio" value="N">  No
+                                        <input name="CompensacionAntiguedad" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>
+                        
+                            <tr>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">14</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">Complemento Profesor asig.</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">24</font></td>
+                                <td align="center" ><font face="Times New Roman, Times, serif" color="#ffffff">$ 0.00</font></td>
+                                <td align="center">
+                                    <font face="Times New Roman, Times, serif" color="#ffffff">
+                                        <input name="ComplementoProfesorAsignatura" type="radio" value="S" > Si
+                                        <input name="ComplementoProfesorAsignatura" type="radio" value="N">  No
+                                        <input name="ComplementoProfesorAsignatura" type="radio" value="I">  Incompleto 
+                                    </font>
+                                </td>                                
+                            </tr>                          
+                            
+                        </table>
+                        
+                <br>                 
+                <br> 
+                
+                    <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%"> 
+                    <TR>                    
+                        <TD WIDTH="50%" ALIGN="center"> <INPUT type="submit" VALUE="Enviar datos" NAME="Enviar"></TD> 
+                        <TD WIDTH="50%" ALIGN="center"><INPUT TYPE="reset" VALUE="Borrar" NAME="Reset"></TD> 
+                    </TR> 
+                    <TR> 
+                        <TD>&nbsp;</TD> 
+                    </TR> 
+                    </TABLE>               
+
+                </FORM>
+
+
+        </CENTER>
+    </BODY>
+</HTML>
