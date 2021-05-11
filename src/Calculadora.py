@@ -1,13 +1,27 @@
 import numpy as np
 import pandas as pd
 
+####
+####EJEMPLO
 
-# Notas
-# todos los identificadores los dejé en español para evitar confusiones
-# con las traducciones al inglés de los tecnicismos...
+# NECESITAMOS DEL FORMULARIO
+#año, 
+#semestre
+#cursos impartidos: horas y nombramiento
+#PEPASIG
+#antigüedad
+#impartió curso el semestre anterior?
+
+semestre_anio = 2021
+semestre_periodo = 2
+tiene_pepasig = False
+antiguedad = 4
+entidad = 'Ciencias'
+impartio_anterior = True
+lista_cursos = [(1,3)] #lista de tuplas (nombramiento, horas)
 
 
-## DICCIONARIOS PARA TODOS LOS TABULADORES TABLAS
+## TABLAS:
 nombramiento = {
     0: 'Ninguno',
     1: 'Profesor de Asignatura A',
@@ -24,10 +38,10 @@ sueldo = {
         4: 338.88
     },
     2021: { # ???
-        1: 400.24,
-        2: 455.04,
-        3: 304.08,
-        4: 338.88
+        1: 420.06,
+        2: 477.56,
+        3: 319.14,
+        4: 355.66
     }
     # Futuro: 2022, 2023, etc... :-p
 }
@@ -59,8 +73,8 @@ tab_vale_libros = {
         'menor': 545
     },
     2021:{
-        'mayor': 1090,
-        'menor': 545
+        'mayor': 1155,
+        'menor': 578
     }
 }
 
@@ -73,10 +87,10 @@ tab_rec_pers_acad  = {2020:
                           },
                       2021: 
                           {
-                          3: 46.29, #ayudanteA
-                          4: 51.53, #ayudanteB
-                          1: 64.39, #profesorA
-                          2: 73.21  #profesorB
+                          3: 47.87, #ayudanteA
+                          4: 53.59, #ayudanteB
+                          1: 66.58, #profesorA
+                          2: 75.70  #profesorB
                           } 
                      }
 
@@ -88,8 +102,8 @@ apoyo_superacion_acad ={
                         },
                         2021: {
                             'bajo': 2435.59,
-                            'medio': 2918.46,
-                            'alto': 4248.43
+                            'medio': 3017.68,
+                            'alto': 4392.88
                         }
                     }
 
@@ -120,11 +134,9 @@ tab_pepasig = {2020:
 
 # DEFINE CLASES: CURSO Y ACADEMICO
 
-
 """
-Datos de contrato de acdémico. Nesesario dado que un acdémico puede
-tener 2 nombramientos. El nombre de esta clase no es adecuado, pues
-el contrato es único cada semestre.
+Datos de cada curso que da acdémico. Nesesario dado que un acdémico puede
+tener 2 nombramientos. 
 """
 class Curso():
     #nombramiento = 1
@@ -143,20 +155,12 @@ class Curso():
 Datos de académico UNAM, útiles para calcular su sueldo.
 """
 class Academico():
-    ID = 'database_id' # Innecesario?
-    nombre = 'Prof. X' # Innecesario?
-    #adscripcion = 'Facultad de Ciencias' # Innecesario?
-    #antiguedad = 1
-    #contratos = [Contrato(1,4,2021,2)]
     cursos = []
-    #contratos_semestre_anterior = []
     nombramientos = []
     horas_semana = 0
     
 
-    def __init__(self,i,n,ads,ant,sem_ant = False, asist = False, pepasig = False, grado = None):
-        self.id = i
-        self.nombre = n
+    def __init__(self,ads,ant,sem_ant = False, asist = False, pepasig = False, grado = None):
         self.adscripcion = ads
         self.antiguedad = ant
         self.sem_ant = sem_ant
@@ -188,10 +192,10 @@ def antiguedadQuincenal(acad):### revisar lo de la multiplicacion
 """
 Calcula el sueldo quincenal.
 """
-def sueldoQuincenal(acad):
+def sueldoQuincenal(acad, anio):
     s = 0.0
     for c in acad.cursos:
-        s += sueldo[c.semestre_anio][c.nombramiento] * c.horas_contrato / 2
+        s += sueldo[anio][c.nombramiento] * c.horas_contrato / 2
     
     s *= (1+antiguedadQuincenal(acad))###########################################
     return s
@@ -205,11 +209,12 @@ por Medio Tiempo de $138.00 a $429.00; por Tiempo Completo de $276.00 a $858.00
 y Profesor Enseñanza Media Superior de $474.00 a $530.00
 """
 
+def MatDidactico(acad, anio):
+    s = 0
+    for curso in acad.cursos:
+        s += tab_mat_didactico[anio][curso.nombramiento]*curso.horas_contrato/2
+    return s
 
-def MatDidactico(acad):
-    max_nomb = min(acad.nombramientos)
-    return tab_mat_didactico[semestre_anio][max_nomb] #se da el monto para el mayor nombramiento o por cada nombramiento???
-    
     
 ## Vale libros
 """
@@ -217,13 +222,13 @@ def MatDidactico(acad):
 y con 20 horas o más $1,090.00 anual.
 """
 
-def ValeLibros(acad):
+def ValeLibros(acad, anio):
     if acad.horas_semana*4 < 20:
         status = 'menor'
     else:
         status = 'mayor'
         
-    return tab_vale_libros[semestre_anio][status]
+    return tab_vale_libros[anio][status]
     
 
 ## Vale día del maestro
@@ -232,56 +237,55 @@ def ValeLibros(acad):
 """
 vale_d_maestro = {
     2020: 995,
-    2021: 995
+    2021: 1044
 }
 
 ## Días de ajuste
 """
 (2020) 5 días al año (6 días en caso de año bisiesto).
 """
-def DiasAjuste(acad):
+def DiasAjuste(acad, anio):
     if semestre_anio % 4 == 0: #bisiesto
         num_dias = 6
     else:
         num_dias = 5
     
-    return sueldoQuincenal(acad)/15*num_dias
+    return sueldoQuincenal(acad, anio)/15*num_dias
 
 ## Prima vacacional
 """
 (2020) 60% del salario, correspondiente a las vacaciones respectivas.
 """
-def PrimaVacacional(acad):
-    return sueldoQuincenal(acad)/15*20*0.6
+def PrimaVacacional(acad, anio):
+    return sueldoQuincenal(acad, anio)/15*20*0.6
 
     
 ## Aguinaldo
 """
 (2020) 40 días, que se pagan en dos exhibiciones de 20 días.
 """
-def MedioAguinaldo(acad):
-    return sueldoQuincenal(acad)/15*20
+def MedioAguinaldo(acad, anio):
+    return sueldoQuincenal(acad, anio)/15*20
 
 
 ## Complemento profesores de asignatura
 complemento_asignatura = {
     2020: 7.7,
-    2021: 7.7 # ???
+    2021: 9.3 # ???
 }
 """
 (2020) A partir de 10 horas/semana/mes o más, recibirán un complemento de
 $7.70 por cada hora/semana/mes que impartan, pago quincenal.
 """
-#def complementoAsignaturaQuincenal(acad):
-#    s = 0.0
-#    for c in acad.contratos:
-#        if c.horas >= 10
-#            if c.nombramiento == 1 || c.nombramiento == 2: # Ayudantes excluidos
-#                s += c.horas * 7.7
-#    return s
-def complementoAsignaturaQuincenal(acad):
-    if (acad.horas_semana>=10)&(min(acad.nombramientos) in [1,2]):
-        return acad.horas_semana*complemento_asignatura[semestre_anio]*2
+
+def complementoAsignaturaQuincenal(acad, anio):
+    horas_asignatura = 0
+    for curso in acad.cursos:
+        if curso.nombramiento in [1,2]:
+            horas_asignatura += curso.horas_contrato
+        
+    if horas_asignatura >= 10:
+        return horas_asignatura*complemento_asignatura[anio]
     else:
         return 0
 
@@ -296,11 +300,13 @@ Prof. Asig. "A": $64.39,  Prof Asig. "B": $73.21,
 Ayte. Prof. "A": $46.29, Ayte. Prof. "B": $51.53
 """
 
-def ReconocimientoProfAsig(acad):
-    """
-    Duda: si hay dos nombramientos, es horas totales por maximo nombramiento o
-    horas por nombramiento por monto nombramiento"""
-    return tab_rec_pers_acad[semestre_anio][min(acad.nombramientos)]*acad.horas_semana*3 
+def ReconocimientoProfAsig(acad, anio):
+    s = 0
+    for curso in acad.cursos:
+        s += tab_rec_pers_acad[anio][curso.nombramiento]*curso.horas_contrato*3
+
+    return s
+
 
 ## Superación académica
 """
@@ -308,15 +314,15 @@ Apoyo para la Superación Académica, cuota por horas contratadas,
 pago semestral.; de 0.5 a 19.5 hras $2,435.59,
 de 20 a 39.5 hras $2,918.46, de 40 hras $4,248.43
 """
+1,044.
 
-
-def SuperacionAcademica(acad):
+def SuperacionAcademica(acad, anio):
     if acad.horas_semana >= 20 & acad.horas_semana < 40 : # >= 5 o > 5???
-        return apoyo_superacion_acad[semestre_anio]['medio']
-    elif(acad.antiguedad > 40):
-        return apoyo_superacion_acad[semestre_anio]['alto']
+        return apoyo_superacion_acad[anio]['medio']
+    elif(acad.horas_semana > 40):
+        return apoyo_superacion_acad[anio]['alto']
     
-    return apoyo_superacion_acad[semestre_anio]['bajo']
+    return apoyo_superacion_acad[anio]['bajo']
 
 
 ## Asistencia
@@ -324,9 +330,9 @@ def SuperacionAcademica(acad):
 Estímulo de Asistencia: Con un mínimo de 90% de asistencia,
 15 dias salario íntegro al año.
 """
-def estimuloAsistenciaSemestral(acad):
+def estimuloAsistenciaSemestral(acad, anio):
     if acad.asist == True:
-        return sueldoQuincenal(acad)/2
+        return sueldoQuincenal(acad, anio)/2
     else:
         return 0
     
@@ -336,17 +342,22 @@ Programa de Estímulos a la Productividad y al Rendimiento del Personal
 Académico de Asignatura, por horas contratadas y grado académico; pago mensual.
 """
 
-def Pepasig(acad):
+def Pepasig(acad, anio):
+    horas_asignatura = 0
+    for curso in acad.cursos:
+        if curso.nombramiento in [1,2]:
+            horas_asignatura += curso.horas_contrato
+    
     if acad.pepasig:
-        if acad.horas_semana >= 30:
-            return tab_pepasig[semestre_anio][10][acad.grado]
-        elif (acad.horas_semana>=3)&(acad.horas_semana <30):
-            return tab_pepasig[semestre_anio][acad.antiguedad//3][acad.grado]
+        if horas_asignatura >= 30:
+            return tab_pepasig[anio][10][acad.grado]
+        elif (horas_asignatura>=3)&(horas_asignatura <30):
+            return tab_pepasig[anio][acad.antiguedad//3][acad.grado]
         else:
             return 0
     else:
         return 0
-        
+
 
 def ModificarMatriz(matriz, acad):
     """
@@ -361,46 +372,47 @@ def ModificarMatriz(matriz, acad):
         return matriz
     
 #CON TODAS LAS FUNCIONES ANTERIORES, GENERA EL VECTOR DE MONTOS DEL ACADEMICO  
-def Montos(acad):
+def Montos(acad, anio):
     montos = np.zeros(15)
-    anio = acad.cursos[0].semestre_anio #el anio; tal vez haya que extraer el anio del formulario
-    montos[0]  = sueldoQuincenal(acad)
-    montos[1]  = MatDidactico(acad)
-    montos[2]  = complementoAsignaturaQuincenal(acad)
+    #anio = semestre_anio 
+    montos[0]  = sueldoQuincenal(acad,anio)
+    montos[1]  = MatDidactico(acad, anio)
+    montos[2]  = complementoAsignaturaQuincenal(acad, anio)
     montos[3]  = vale_despensa[anio]
-    montos[4]  = ReconocimientoProfAsig(acad)
-    montos[5]  = SuperacionAcademica(acad)
-    montos[6]  = PrimaVacacional(acad)
-    montos[7]  = MedioAguinaldo(acad)
-    montos[8]  = ValeLibros(acad)
+    montos[4]  = ReconocimientoProfAsig(acad, anio)
+    montos[5]  = SuperacionAcademica(acad, anio)
+    montos[6]  = PrimaVacacional(acad, anio)
+    montos[7]  = MedioAguinaldo(acad, anio)
+    montos[8]  = ValeLibros(acad, anio)
     montos[9]  = vale_d_maestro[anio]
-    montos[10] = DiasAjuste(acad)
-    montos[11] = sueldoQuincenal(acad)/15
+    montos[10] = DiasAjuste(acad, anio)
+    montos[11] = sueldoQuincenal(acad, anio)/15
     montos[12] = vale_despensa[anio]
-    montos[13] = estimuloAsistenciaSemestral(acad)
-    montos[14] = Pepasig(acad)
+    montos[13] = estimuloAsistenciaSemestral(acad, anio)
+    montos[14] = Pepasig(acad, anio)
     
     return montos
 
 # GENERA LA MATRIZ DE SEMESTRES (INFORMACION DEL TRIPTICO)
-#requiere: año, semestre
-
-matriz = np.zeros((15,24))
-matriz[0] = np.ones(24) #sueldo base
-matriz[1] = np.ones(24) #material didactico
-matriz[2] = np.ones(24) #complemento prof asignatura
-matriz[3] = 12*[0,1] #ayuda despensa
-matriz[4] = np.roll(4*[0,0,0,0,0,1], 4) #reconocimiento al personal academico
-matriz[5,1] = matriz[5,15] = 1 #apoyo superacion academica
-matriz[6,10] = matriz[6,21] = 1 # Prima vacacional
+#matriz 2020-2021
+matriz = np.zeros((15,36))
+matriz[0] = np.ones(36) #sueldo base
+matriz[1] = np.ones(36) #material didactico
+matriz[2] = np.ones(36) #complemento prof asignatura
+matriz[3] = 18*[0,1] #ayuda despensa
+matriz[4] = np.roll(6*[0,0,0,0,0,1], 4) #reconocimiento al personal academico
+matriz[5,1] = matriz[5,15] = matriz[5,25] = 1 #apoyo superacion academica
+matriz[6,10] = matriz[6,21] = matriz[6,34] = 1 # Prima vacacional
 matriz[7, 20] = matriz[7,22] = 1 # Aguinaldo
-matriz[8, 2] = 1 #ayuda adq. libros
-matriz[9,6] = 1  #Ayuda libros dia del maestro
-matriz[10, 10] = 1 #dias de ajuste
-matriz[11,14] = matriz[11, 18] = 1 #Pago clausula 60
-matriz[12,1] = 1 #despensa extraordinaria
+matriz[8, 2] = matriz[8, 26] =1 #ayuda adq. libros
+matriz[9,6] = matriz[9,30] = 1  #Ayuda libros dia del maestro
+matriz[10, 10] = matriz[10, 34] = 1 #dias de ajuste
+matriz[11,6] = matriz[11, 18] = matriz[11, 20] = 1 #Pago clausula 60
+matriz[11, 30] = 2
+matriz[12,1] = matriz[12,25] = 1 #despensa extraordinaria
 matriz[13,11] = matriz[13, 23] = 1 #bono asistencia
-matriz[14] = 12*[0,1]# PEPASIG
+matriz[14] = 18*[0,1]# PEPASIG
+
 
 conceptos = ['Sueldo base',
              'Material didáctico',
@@ -419,49 +431,51 @@ conceptos = ['Sueldo base',
              'PEPASIG']
 conceptos = np.array(conceptos)
 
-####
-####EJEMPLO
-
-# NECESITAMOS DEL FORMULARIO
-#año, 
-#semestre
-#quincena de consulta.
-#cursos impartidos: horas y nombramiento
-#PEPASIG
-#antigüedad
-#impartió curso el semestre anterior?
-
-semestre_anio = 2020
-semestre_periodo = 1
-quincenas_consulta = np.ones(24) #todo el anio. Falta hacer la funcion que genere el vector a partir del semestre solicitado
-tiene_pepasig = False
-antiguedad = 3
-acad_id = 5551
-acad_nom = 'CFBM'
-entidad = 'Ciencias'
-impartio_anterior = True
-
-#cursos: un formulario por curso
-curso1 = Curso(1, 4, semestre_anio, semestre_periodo) #un curso como profe A: nombramiento = 1
-curso2 = Curso(3, 3, semestre_anio, semestre_periodo) #un curso como ayudante A: nombramiento = 3
+def Semestre_consulta(semestre_anio, semestre_periodo):
+    if semestre_anio == 2020 and semestre_periodo == 2:
+        quincenas_consulta = np.concatenate([np.ones(15),np.zeros(21)])
+    elif semestre_anio == 2021 and semestre_periodo == 1:
+        quincenas_consulta = np.concatenate([np.zeros(15),np.ones(11), np.zeros(10)])
+    elif semestre_anio == 2021 and semestre_periodo == 2:
+        quincenas_consulta = np.concatenate([np.zeros(26),np.ones(10)])
+        
+    return quincenas_consulta
 
 
-#GENERA LAS VARIABLES acad y dos cursos
-acad = Academico(acad_id, acad_nom, entidad, antiguedad)
+def Calculo_ingreso_semestral(semestre_anio, semestre_periodo, entidad, antiguedad, lista_cursos, tiene_pepasig,impartio_anterior):
+    global matriz
+    quincenas_consulta = Semestre_consulta(semestre_anio, semestre_periodo) #todo el anio. Falta hacer la funcion que genere el vector a partir del semestre solicitado
 
 
-acad.AgregarCurso(curso1)
-acad.AgregarCurso(curso2)
+    #GENERA LAS VARIABLES acad y dos cursos
+    acad = Academico(entidad, antiguedad)
+    for elemento in lista_cursos:
+        acad.AgregarCurso(Curso(elemento[0], elemento[1], semestre_anio, semestre_periodo))
+        #curso2 = Curso(1, 3, semestre_anio, semestre_periodo) #un curso como ayudante A: nombramiento = 3
 
-matriz = ModificarMatriz(matriz,acad)
-matriz = pd.DataFrame(matriz, index=conceptos,  columns= np.roll(range(1,25),-2))
+    nom_quincenas =  np.roll(range(1,25),-2)
+    nom_quincenas = np.concatenate([nom_quincenas, nom_quincenas[:12]])
+
+    matriz = ModificarMatriz(matriz,acad)
+    matriz = pd.DataFrame(matriz, index=conceptos,  columns= nom_quincenas)
+    matriz = matriz.iloc[:, quincenas_consulta==1]
+    
+    anio = semestre_anio
+    if semestre_periodo == 1:
+        anio -= 1
+    print(anio)
+    montos = Montos(acad, anio)
+    montos = pd.Series(montos, index = conceptos)
+
+    tabla = matriz.mul(montos, axis = 0).round(2).T
+    tabla = tabla.iloc[:,(tabla.cumsum().iloc[-1, :] != 0).values]
+
+    tabla['Total quincena'] = tabla.sum(axis = 1)
+    tabla['Total acumulado'] = tabla['Total quincena'].cumsum()
+
+    return dict(tabla.apply(lambda x: x.round(2)).T.apply(dict))
 
 
-montos = Montos(acad)
-montos = pd.Series(montos, index = conceptos)
 
 
-tabla = matriz.mul(montos, axis = 0).round(2).T
-tabla = tabla.iloc[:,(tabla.cumsum().iloc[-1, :] != 0).values]
-
-print(tabla)
+Calculo_ingreso_semestral(semestre_anio, semestre_periodo, entidad, antiguedad, lista_cursos, tiene_pepasig, impartio_anterior)
