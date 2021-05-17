@@ -13,7 +13,7 @@ import pandas as pd
 #impartió curso el semestre anterior?
 
 semestre_anio = 2021
-semestre_periodo = 2
+semestre_periodo = 1
 tiene_pepasig = False
 antiguedad = 4
 entidad = 'Ciencias'
@@ -447,7 +447,6 @@ def Calculo_ingreso_semestral(semestre_anio, semestre_periodo, entidad, antigued
     quincenas_consulta = Semestre_consulta(semestre_anio, semestre_periodo) #todo el anio. Falta hacer la funcion que genere el vector a partir del semestre solicitado
 
 
-    #GENERA LAS VARIABLES acad y dos cursos
     acad = Academico(entidad, antiguedad)
     for elemento in lista_cursos:
         acad.AgregarCurso(Curso(elemento[0], elemento[1], semestre_anio, semestre_periodo))
@@ -466,10 +465,15 @@ def Calculo_ingreso_semestral(semestre_anio, semestre_periodo, entidad, antigued
     print(anio)
     montos = Montos(acad, anio)
     montos = pd.Series(montos, index = conceptos)
+    
 
-    tabla = matriz.mul(montos, axis = 0).round(2).T
+    tabla = matriz.mul(montos, axis = 0).round(2)    
+    if (semestre_anio == 2021) & (semestre_periodo == 1):#modifica los montos de los ultimos dos meses de ese semestre
+        tabla.loc[:,[3,4]] = matriz.loc[:,[3,4]].mul(Montos(acad,2021), axis = 0).round(2) 
+    tabla = tabla.T
     tabla = tabla.iloc[:,(tabla.cumsum().iloc[-1, :] != 0).values]
-
+        
+        
     tabla['Total quincena'] = tabla.sum(axis = 1)
     tabla['Total acumulado'] = tabla['Total quincena'].cumsum()
 
